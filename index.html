@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engels Échafaudages | L'échafaudage à la hauteur de vos projets</title>
+<meta name="description" content="Engels Échafaudages : location, montage et démontage de matériel d'échafaudage pour professionnels et particuliers. Basés au Roeulx, actifs en Belgique et dans le nord de la France.">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{
+    --blue-900:#00274d;
+    --blue-800:#00386c;
+    --blue-700:#004a90;
+    --blue-600:#0a63b8;
+    --green-500:#019f25;
+    --green-400:#2ec24a;
+    --ink:#0a0e14;
+    --ink-soft:#111826;
+    --paper:#f4f6f8;
+    --white:#ffffff;
+    --muted:rgba(244,246,248,.68);
+    --glass-bg:rgba(255,255,255,.06);
+    --glass-border:rgba(255,255,255,.14);
+    --font-head:'Barlow Condensed',sans-serif;
+    --font-body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+    background:var(--ink);
+    color:var(--white);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+.container{max-width:1240px;margin:0 auto;padding:0 6%;}
+h1,h2,h3{font-family:var(--font-head);font-weight:700;letter-spacing:.01em;text-transform:uppercase;}
+.eyebrow{
+    display:inline-flex;align-items:center;gap:.6rem;
+    font-family:var(--font-head);font-weight:600;font-size:.8rem;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--green-400);
+    margin-bottom:1rem;
+}
+.eyebrow::before{content:"";width:28px;height:2px;background:var(--green-400);display:block;}
+.section{padding:7rem 0;position:relative;}
+.section-dark{background:var(--ink);}
+.section-alt{background:var(--ink-soft);}
+.btn{
+    display:inline-flex;align-items:center;gap:.9rem;
+    background:var(--green-500);color:var(--white);
+    font-family:var(--font-head);font-weight:700;font-size:1rem;
+    letter-spacing:.04em;text-transform:uppercase;
+    padding:.95rem 1.8rem;border-radius:4px;border:none;cursor:pointer;
+    transition:transform .3s ease, background .3s ease, box-shadow .3s ease;
+    box-shadow:0 10px 30px -10px rgba(1,159,37,.6);
+}
+.btn:hover{background:var(--green-400);transform:translateY(-3px);}
+.btn.btn-outline{
+    background:transparent;color:var(--white);
+    border:1.5px solid rgba(255,255,255,.35);box-shadow:none;
+}
+.btn.btn-outline:hover{border-color:var(--green-400);color:var(--green-400);background:rgba(255,255,255,.04);}
+.btn .arrow{transition:transform .3s ease;}
+.btn:hover .arrow{transform:translateX(4px);}
+
+/* ---------- Header ---------- */
+.header{
+    position:fixed;top:0;left:0;width:100%;z-index:200;
+    padding:1.4rem 0;
+    transition:padding .35s ease, background .35s ease, box-shadow .35s ease;
+}
+.header.scrolled{
+    padding:.75rem 0;
+    background:rgba(10,14,20,.85);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    box-shadow:0 10px 30px -20px rgba(0,0,0,.8);
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:2rem;}
+.logo{display:flex;align-items:center;gap:.6rem;}
+.logo img{height:38px;width:auto;transition:height .35s ease;}
+.header.scrolled .logo img{height:30px;}
+.nav{display:flex;align-items:center;gap:.3rem;background:var(--glass-bg);border:1px solid var(--glass-border);padding:.35rem;border-radius:100px;backdrop-filter:blur(14px);}
+.nav a{
+    font-family:var(--font-head);font-weight:600;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);padding:.6rem 1.1rem;border-radius:100px;transition:all .3s ease;
+}
+.nav a:hover,.nav a.active{background:var(--green-500);color:var(--white);}
+.header-cta{display:flex;align-items:center;gap:1rem;}
+.header-phone{display:flex;flex-direction:column;text-align:right;font-size:.8rem;color:var(--muted);}
+.header-phone strong{font-family:var(--font-head);font-size:1rem;color:var(--white);letter-spacing:.03em;}
+.nav-toggle{display:none;background:none;border:none;color:var(--white);font-size:1.6rem;cursor:pointer;}
+
+/* ---------- Hero ---------- */
+.hero{
+    position:relative;min-height:100vh;display:flex;align-items:flex-end;
+    padding-bottom:6.5rem;overflow:hidden;
+}
+.hero-bg{
+    position:absolute;inset:0;z-index:-2;
+    background:linear-gradient(180deg,rgba(6,10,16,.55) 0%,rgba(6,10,16,.55) 45%,rgba(6,10,16,.96) 100%),
+               linear-gradient(100deg,rgba(0,38,77,.75),rgba(1,159,37,.25)),
+               url('assets/images/hero.jpg') center 38%/cover no-repeat;
+    transform:scale(1.08);
+    will-change:transform;
+}
+.hero-grid{
+    position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,.9) 40%,transparent 95%);
+}
+.hero-content{width:100%;}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;}
+.hero h1{
+    font-size:clamp(3rem,7.2vw,6.4rem);line-height:.92;
+    max-width:16ch;
+}
+.hero h1 .accent{color:var(--green-400);}
+.hero-sub{
+    max-width:420px;color:var(--muted);font-size:1.05rem;
+    padding-bottom:.6rem;
+}
+.hero-actions{display:flex;gap:1rem;margin-top:2.4rem;flex-wrap:wrap;}
+.hero-badge{
+    margin-top:3.5rem;display:flex;gap:2.5rem;flex-wrap:wrap;
+    padding-top:2rem;border-top:1px solid rgba(255,255,255,.12);
+}
+.hero-badge .item{display:flex;flex-direction:column;gap:.2rem;}
+.hero-badge .item strong{font-family:var(--font-head);font-size:2.2rem;color:var(--white);}
+.hero-badge .item span{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.scroll-cue{
+    position:absolute;right:6%;bottom:2.2rem;display:flex;flex-direction:column;align-items:center;gap:.6rem;
+    color:var(--muted);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+}
+.scroll-cue .line{width:1px;height:46px;background:linear-gradient(var(--green-400),transparent);animation:scrollcue 1.8s ease-in-out infinite;}
+@keyframes scrollcue{0%{opacity:0;transform:scaleY(.3);transform-origin:top;}50%{opacity:1;transform:scaleY(1);}100%{opacity:0;transform:scaleY(.3);transform-origin:bottom;}}
+
+/* ---------- About ---------- */
+.about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:5rem;align-items:center;}
+.about-visual{position:relative;}
+.about-visual .frame{
+    position:relative;border-radius:8px;overflow:hidden;
+    box-shadow:0 40px 80px -30px rgba(0,0,0,.7);
+    border:1px solid rgba(255,255,255,.08);
+}
+.about-visual .frame img{transition:transform .8s ease;}
+.about-visual:hover .frame img{transform:scale(1.05);}
+.about-visual .stat-card{
+    position:absolute;bottom:-1.6rem;left:-1.6rem;
+    background:var(--green-500);color:var(--white);
+    padding:1.4rem 1.7rem;border-radius:8px;
+    box-shadow:0 20px 40px -15px rgba(1,159,37,.55);
+}
+.about-visual .stat-card strong{display:block;font-family:var(--font-head);font-size:2.4rem;line-height:1;}
+.about-visual .stat-card span{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;}
+.about-copy h2{font-size:clamp(2.2rem,3.6vw,3.2rem);line-height:1.05;margin-bottom:1.4rem;}
+.about-copy p{color:var(--muted);margin-bottom:1.1rem;max-width:52ch;}
+.about-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.9rem 1.4rem;margin-top:1.8rem;}
+.about-list li{display:flex;align-items:center;gap:.7rem;font-size:.92rem;color:var(--white);}
+.about-list li::before{
+    content:"";flex:0 0 auto;width:20px;height:20px;border-radius:50%;
+    background:rgba(1,159,37,.15);border:1px solid var(--green-500);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2319e24a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-size:11px;background-repeat:no-repeat;background-position:center;
+}
+
+/* ---------- Services ---------- */
+.services-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;margin-bottom:3.5rem;}
+.services-head h2{font-size:clamp(2.2rem,3.6vw,3.2rem);max-width:14ch;}
+.services-head p{color:var(--muted);max-width:40ch;}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;}
+.service-card{
+    background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:10px;
+    padding:2.2rem 1.9rem;transition:transform .4s ease, border-color .4s ease, background .4s ease;
+    position:relative;overflow:hidden;
+}
+.service-card::after{
+    content:"";position:absolute;inset:0;opacity:0;transition:opacity .4s ease;
+    background:linear-gradient(135deg,rgba(1,159,37,.12),transparent 60%);
+}
+.service-card:hover{transform:translateY(-8px);border-color:rgba(1,159,37,.5);}
+.service-card:hover::after{opacity:1;}
+.service-icon{
+    width:52px;height:52px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(1,159,37,.14);color:var(--green-400);margin-bottom:1.4rem;
+    font-family:var(--font-head);font-size:1.4rem;font-weight:700;
+}
+.service-card h3{font-size:1.35rem;margin-bottom:.7rem;text-transform:none;letter-spacing:0;}
+.service-card p{color:var(--muted);font-size:.92rem;}
+
+/* ---------- Numbers band ---------- */
+.numbers{
+    background:linear-gradient(120deg,var(--blue-900),var(--blue-800) 60%,var(--blue-700));
+    padding:4.5rem 0;position:relative;overflow:hidden;
+}
+.numbers::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.035) 0 2px,transparent 2px 26px);
+}
+.numbers-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center;}
+.numbers-grid .num{font-family:var(--font-head);font-size:clamp(2.4rem,4vw,3.4rem);color:var(--white);}
+.numbers-grid .lbl{font-size:.82rem;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem;}
+
+/* ---------- Safety / coverage ---------- */
+.safety{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.safety h2{font-size:clamp(2.2rem,3.6vw,3.2rem);margin-bottom:1.3rem;}
+.safety p{color:var(--muted);max-width:50ch;margin-bottom:1.6rem;}
+.region-tags{display:flex;flex-wrap:wrap;gap:.6rem;}
+.region-tags span{
+    font-family:var(--font-head);font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;
+    padding:.5rem 1rem;border-radius:100px;border:1px solid rgba(255,255,255,.16);color:var(--white);
+}
+.safety-visual{
+    position:relative;border-radius:10px;padding:2.4rem;
+    background:var(--glass-bg);border:1px solid var(--glass-border);
+}
+.safety-visual .badge-row{display:flex;gap:1.2rem;margin-bottom:1.6rem;}
+.safety-visual .badge{
+    flex:1;text-align:center;padding:1.2rem .8rem;border-radius:8px;
+    background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+}
+.safety-visual .badge strong{display:block;font-family:var(--font-head);font-size:1.6rem;color:var(--green-400);}
+.safety-visual .badge span{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.safety-visual .addr{font-size:.92rem;color:var(--muted);border-top:1px solid rgba(255,255,255,.1);padding-top:1.4rem;}
+.safety-visual .addr strong{color:var(--white);display:block;margin-bottom:.3rem;font-family:var(--font-head);letter-spacing:.03em;font-size:1.05rem;}
+
+/* ---------- Réalisations (gallery) ---------- */
+.gallery-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:190px;gap:1rem;
+}
+.gallery-item{
+    position:relative;overflow:hidden;border-radius:8px;cursor:pointer;
+}
+.gallery-item.tall{grid-row:span 2;}
+.gallery-item.wide{grid-column:span 2;}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1);}
+.gallery-item:hover img{transform:scale(1.09);}
+.gallery-item .tag{
+    position:absolute;left:0;right:0;bottom:0;padding:1rem 1.1rem;
+    background:linear-gradient(0deg,rgba(0,0,0,.82),transparent);
+    font-family:var(--font-head);font-size:.95rem;letter-spacing:.03em;
+    transform:translateY(8px);opacity:0;transition:all .4s ease;
+}
+.gallery-item:hover .tag{transform:translateY(0);opacity:1;}
+
+/* ---------- References / testimonial strip ---------- */
+.refs-strip{display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;}
+.refs-strip .quote{max-width:640px;}
+.refs-strip .quote p{font-family:var(--font-head);font-size:clamp(1.4rem,2.4vw,2rem);line-height:1.3;color:var(--white);text-transform:none;letter-spacing:0;}
+.refs-strip .quote span{display:block;margin-top:1rem;color:var(--green-400);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;font-family:var(--font-head);}
+.client-list{display:flex;flex-wrap:wrap;gap:.7rem;max-width:420px;}
+.client-list span{
+    font-size:.8rem;color:var(--muted);border:1px solid rgba(255,255,255,.14);
+    padding:.5rem .9rem;border-radius:100px;
+}
+
+/* ---------- Contact ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.contact-info h2{font-size:clamp(2.2rem,3.6vw,3.2rem);margin-bottom:1.2rem;}
+.contact-info p{color:var(--muted);max-width:46ch;margin-bottom:2.2rem;}
+.contact-cards{display:flex;flex-direction:column;gap:1rem;}
+.contact-card{
+    display:flex;gap:1rem;align-items:flex-start;
+    background:var(--glass-bg);border:1px solid var(--glass-border);
+    padding:1.2rem 1.4rem;border-radius:8px;
+}
+.contact-card .ico{
+    width:40px;height:40px;flex:0 0 auto;border-radius:8px;
+    background:rgba(1,159,37,.16);color:var(--green-400);
+    display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+}
+.contact-card strong{display:block;font-size:.95rem;margin-bottom:.15rem;}
+.contact-card span,.contact-card a{color:var(--muted);font-size:.9rem;}
+.contact-card a:hover{color:var(--green-400);}
+.contact-form{
+    background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:10px;padding:2.4rem;
+}
+.contact-form h3{text-transform:none;letter-spacing:0;font-size:1.3rem;margin-bottom:1.6rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.form-field{display:flex;flex-direction:column;gap:.4rem;}
+.form-field.full{grid-column:1 / -1;}
+.form-field label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.form-field input,.form-field textarea{
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:6px;
+    padding:.75rem .9rem;color:var(--white);font-family:var(--font-body);font-size:.92rem;
+}
+.form-field input:focus,.form-field textarea:focus{outline:none;border-color:var(--green-500);background:rgba(255,255,255,.08);}
+.form-field textarea{resize:vertical;min-height:100px;}
+.contact-form .btn{width:100%;justify-content:center;margin-top:.4rem;}
+.form-note{font-size:.78rem;color:var(--muted);margin-top:.8rem;text-align:center;}
+
+/* ---------- Footer ---------- */
+.footer{background:var(--ink-soft);padding:3.5rem 0 2rem;border-top:1px solid rgba(255,255,255,.06);}
+.footer-top{display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;padding-bottom:2.2rem;margin-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.06);}
+.footer-nav{display:flex;gap:1.6rem;flex-wrap:wrap;}
+.footer-nav a{font-size:.88rem;color:var(--muted);}
+.footer-nav a:hover{color:var(--green-400);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;font-size:.8rem;color:var(--muted);}
+.footer-bottom a:hover{color:var(--green-400);}
+
+/* ---------- Reveal utility ---------- */
+.reveal{opacity:0;transform:translateY(32px);}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1080px){
+    .nav{display:none;}
+    .nav-toggle{display:block;}
+    .about-grid,.safety,.contact-grid{grid-template-columns:1fr;gap:3rem;}
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .numbers-grid{grid-template-columns:repeat(2,1fr);row-gap:2.2rem;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery-item.tall{grid-row:span 1;}
+    .gallery-item.wide{grid-column:span 2;}
+    .header-phone{display:none;}
+}
+@media (max-width:640px){
+    .services-grid{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .about-list{grid-template-columns:1fr;}
+    .hero{align-items:center;padding-bottom:3rem;padding-top:8rem;}
+    .about-visual .stat-card{left:0;bottom:-1.2rem;padding:1.1rem 1.3rem;}
+    .refs-strip{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<div id="bubbles-container"></div>
+
+<header class="header" id="siteHeader">
+    <div class="container header-inner">
+        <a href="#home" class="logo"><img src="assets/images/logo.png" alt="Engels Échafaudages"></a>
+        <nav class="nav">
+            <a href="#home" class="active">Accueil</a>
+            <a href="#services">Location échafaudages</a>
+            <a href="#realisations">Réalisations</a>
+            <a href="#references">Références</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <div class="header-cta">
+            <div class="header-phone">
+                <span>Devis gratuit</span>
+                <strong>+32 65 70 40 53</strong>
+            </div>
+            <a href="#contact" class="btn">Contact<span class="arrow">→</span></a>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="home">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-grid"></div>
+    <div class="container hero-content">
+        <div class="hero-top">
+            <div>
+                <p class="eyebrow">Location &amp; montage d'échafaudages</p>
+                <h1 class="reveal">L'échafaudage<br>à la <span class="accent">hauteur</span><br>de vos projets</h1>
+            </div>
+            <p class="hero-sub reveal">Engels Échafaudages loue, conçoit et installe votre matériel d'échafaudage — devis gratuit, montage-démontage, transport et réception de chantier, du particulier au grand groupe.</p>
+        </div>
+        <div class="hero-actions reveal">
+            <a href="#contact" class="btn">Demander un devis gratuit <span class="arrow">→</span></a>
+            <a href="#realisations" class="btn btn-outline">Voir nos réalisations</a>
+        </div>
+        <div class="hero-badge reveal">
+            <div class="item"><strong>450+</strong><span>Chantiers / an</span></div>
+            <div class="item"><strong>2012</strong><span>À votre service depuis</span></div>
+            <div class="item"><strong>20–5000 m²</strong><span>Toutes surfaces</span></div>
+            <div class="item"><strong>BE / FR</strong><span>Belgique &amp; nord de la France</span></div>
+        </div>
+    </div>
+    <div class="scroll-cue"><span>Défiler</span><span class="line"></span></div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="section section-dark" id="about">
+    <div class="container about-grid">
+        <div class="about-visual reveal">
+            <div class="frame"><img src="assets/images/proj-druez-jumet.jpg" alt="Chantier échafaudage Engels - Jumet"></div>
+            <div class="stat-card"><strong>13+</strong><span>Ans d'expérience</span></div>
+        </div>
+        <div class="about-copy reveal">
+            <p class="eyebrow">À propos</p>
+            <h2>Loueur et installateur d'échafaudages, au service des pros comme des particuliers</h2>
+            <p>Engels Échafaudages est spécialisée dans la location de matériel d'échafaudage avec montage et services. Cette activité est née au sein de la société Répamine en 2012 ; forte d'une croissance continue, elle a été reprise par Bernard Engels en mars 2017.</p>
+            <p>Accompagné de toute son équipe, Bernard Engels développe au quotidien l'activité de loueur et d'installateur d'échafaudages, en gardant un service de qualité destiné aussi bien aux professionnels qu'aux particuliers.</p>
+            <ul class="about-list">
+                <li>Devis gratuit et conception sur mesure</li>
+                <li>Montage &amp; démontage soignés</li>
+                <li>Transport et réception du matériel</li>
+                <li>Conformité aux normes européennes</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="section section-alt" id="services">
+    <div class="container">
+        <div class="services-head reveal">
+            <div>
+                <p class="eyebrow">Nos services</p>
+                <h2>Un service complet, du devis au démontage</h2>
+            </div>
+            <p>Dynamique et efficace, Engels Échafaudages œuvre sur plus de 450 chantiers par an, tant en Belgique que dans le nord de la France.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <div class="service-icon">01</div>
+                <h3>Devis gratuit</h3>
+                <p>Étude de votre projet et proposition chiffrée sans engagement, adaptée à la surface et à la configuration du chantier.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">02</div>
+                <h3>Conception</h3>
+                <p>Plan de montage étudié pour chaque façade, toiture ou structure complexe, de 20 m² à 5000 m².</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">03</div>
+                <h3>Montage &amp; démontage</h3>
+                <p>Nos équipes interviennent avec soin, dans le respect des normes européennes en vigueur et des délais convenus.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">04</div>
+                <h3>Location de matériel</h3>
+                <p>Un parc d'échafaudages complet, disponible à la location pour tout type de chantier, court ou long terme.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">05</div>
+                <h3>Transport</h3>
+                <p>Acheminement et enlèvement du matériel directement sur site, partout en Belgique et dans le nord de la France.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon">06</div>
+                <h3>Réception de chantier</h3>
+                <p>Contrôle final et réception du matériel installé pour garantir des installations fiables et sécurisées.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= NUMBERS ================= -->
+<section class="numbers">
+    <div class="container numbers-grid">
+        <div>
+            <div class="num" data-count="450">0</div>
+            <div class="lbl">Chantiers par an</div>
+        </div>
+        <div>
+            <div class="num" data-count="13">0</div>
+            <div class="lbl">Ans d'expérience</div>
+        </div>
+        <div>
+            <div class="num" data-count="5000">0</div>
+            <div class="lbl">m² max. par montage</div>
+        </div>
+        <div>
+            <div class="num" data-count="5">0</div>
+            <div class="lbl">Provinces desservies</div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= SAFETY / COVERAGE ================= -->
+<section class="section section-dark" id="safety">
+    <div class="container safety">
+        <div class="reveal">
+            <p class="eyebrow">Votre sécurité, notre métier</p>
+            <h2>Des installations fiables, aux normes européennes</h2>
+            <p>Nos équipes effectuent les montages avec soin en répondant aux normes européennes en vigueur. Nous respectons les délais et réalisons des installations fiables, adaptées aux projets de chacun — du particulier au grand chantier industriel.</p>
+            <p>Engels Échafaudages est implantée dans la région du Roeulx, à proximité immédiate des grands axes autoroutiers. Une situation idéale qui nous permet de servir rapidement plusieurs provinces et régions.</p>
+            <div class="region-tags">
+                <span>Hainaut</span><span>Namur</span><span>Liège</span><span>Bruxelles</span><span>Flandre</span><span>Nord de la France</span>
+            </div>
+        </div>
+        <div class="safety-visual reveal">
+            <div class="badge-row">
+                <div class="badge"><strong>20 m²</strong><span>Surface min.</span></div>
+                <div class="badge"><strong>5000 m²</strong><span>Surface max.</span></div>
+                <div class="badge"><strong>EU</strong><span>Normes respectées</span></div>
+            </div>
+            <div class="addr">
+                <strong>Engels Échafaudages SPRL</strong>
+                Rue de la Station, 142 — Hall 41<br>
+                B-7070 Le Roeulx, Belgique
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= RÉALISATIONS ================= -->
+<section class="section section-alt" id="realisations">
+    <div class="container">
+        <div class="services-head reveal">
+            <div>
+                <p class="eyebrow">Réalisations</p>
+                <h2>Quelques chantiers menés par nos équipes</h2>
+            </div>
+            <p>Sites industriels, brasseries, carrières, projets résidentiels : un aperçu de la diversité de nos montages.</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item tall reveal">
+                <img src="assets/images/proj-lixon-tournai.jpg" alt="Chantier Lixon - Tournai">
+                <div class="tag">Lixon — Tournai</div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/images/proj-brasserie-haacht.jpg" alt="Brasserie Haacht - Liège">
+                <div class="tag">Brasserie Haacht — Liège</div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/images/proj-csf-hannut.jpg" alt="CSF - Hannut">
+                <div class="tag">CSF — Hannut</div>
+            </div>
+            <div class="gallery-item wide reveal">
+                <img src="assets/images/proj-tphome-tubize.jpg" alt="TP Home - Tubize">
+                <div class="tag">TP Home — Tubize</div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/images/proj-sotraba-sirault.jpg" alt="Sotraba - Sirault">
+                <div class="tag">Sotraba — Sirault</div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/images/proj-granits-lucas.jpg" alt="Granits Lucas - Fayt-lez-Manage">
+                <div class="tag">Granits Lucas — Fayt-lez-Manage</div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/images/proj-deroubaix-bettens.jpg" alt="Deroubaix - Bettens">
+                <div class="tag">Deroubaix — Bettens</div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/images/proj-scoop-batiment.jpg" alt="Scoop Bâtiment">
+                <div class="tag">Scoop Bâtiment</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= RÉFÉRENCES ================= -->
+<section class="section section-dark" id="references">
+    <div class="container refs-strip">
+        <div class="quote reveal">
+            <p>« Toujours au service de nos clients, nous répondons à toutes les demandes de montage et de démontage de matériel d'échafaudage. »</p>
+            <span>— L'équipe Engels Échafaudages</span>
+        </div>
+        <div class="client-list reveal">
+            <span>Lixon</span>
+            <span>Sotraba</span>
+            <span>TP Home</span>
+            <span>Brasserie Haacht</span>
+            <span>Granits Lucas</span>
+            <span>Deroubaix</span>
+            <span>Scoop Bâtiment</span>
+            <span>CSF Hannut</span>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="section section-alt" id="contact">
+    <div class="container contact-grid">
+        <div class="contact-info reveal">
+            <p class="eyebrow">Contact</p>
+            <h2>Un projet ? Demandez votre devis gratuit</h2>
+            <p>Du 20 m² au 5000 m², nos équipes vous répondent rapidement pour étudier votre chantier, en Belgique comme dans le nord de la France.</p>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <div class="ico">📍</div>
+                    <div><strong>Adresse</strong><span>Rue de la Station, 142 — Hall 41, B-7070 Le Roeulx</span></div>
+                </div>
+                <div class="contact-card">
+                    <div class="ico">📞</div>
+                    <div>
+                        <strong>Téléphone</strong>
+                        <a href="tel:+3265704053">+32 65 70 40 53</a> ·
+                        <a href="tel:+32495866668">+32 495 86 66 68</a> ·
+                        <a href="tel:+32473665969">+32 473 66 59 69</a>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="ico">✉️</div>
+                    <div><strong>Email</strong><a href="mailto:info@engels-echafaudages.be">info@engels-echafaudages.be</a></div>
+                </div>
+            </div>
+        </div>
+        <form class="contact-form reveal" onsubmit="return false;">
+            <h3>Demande de devis gratuit</h3>
+            <div class="form-row">
+                <div class="form-field"><label>Nom</label><input type="text" required></div>
+                <div class="form-field"><label>Téléphone</label><input type="tel"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-field full"><label>Email</label><input type="email" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-field full"><label>Votre projet</label><textarea placeholder="Type de chantier, surface approximative, adresse..."></textarea></div>
+            </div>
+            <button type="submit" class="btn">Envoyer la demande <span class="arrow">→</span></button>
+            <p class="form-note">Vous pouvez aussi nous écrire directement à info@engels-echafaudages.be</p>
+        </form>
+    </div>
+</section>
+
+</main>
+
+<footer class="footer">
+    <div class="container footer-top">
+        <a href="#home" class="logo"><img src="assets/images/logo.png" alt="Engels Échafaudages" style="height:32px;"></a>
+        <nav class="footer-nav">
+            <a href="#home">Accueil</a>
+            <a href="#services">Location échafaudages</a>
+            <a href="#realisations">Réalisations</a>
+            <a href="#references">Références</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </div>
+    <div class="container footer-bottom">
+        <span>© Engels Échafaudages SPRL — Rue de la Station, 142, B-7070 Le Roeulx</span>
+        <span>Conception adaptée à partir du site officiel <a href="https://www.engels-echafaudages.be/" target="_blank" rel="noopener">engels-echafaudages.be</a></span>
+    </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* Header shrink on scroll */
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* Hero parallax background */
+const heroBg = document.getElementById('heroBg');
+gsap.to(heroBg, {
+    scale: 1,
+    ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+});
+window.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 16;
+    const y = (e.clientY / window.innerHeight - 0.5) * 16;
+    gsap.to(heroBg, { x: x, y: y, duration: 1.2, ease: 'power2.out' });
+});
+
+/* Reveal on scroll */
+document.querySelectorAll('.reveal').forEach((el) => {
+    gsap.to(el, {
+        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%' }
+    });
+});
+
+/* Animated stat counters */
+document.querySelectorAll('.num').forEach((el) => {
+    const target = parseInt(el.dataset.count, 10);
+    ScrollTrigger.create({
+        trigger: el,
+        start: 'top 90%',
+        once: true,
+        onEnter: () => {
+            const obj = { val: 0 };
+            gsap.to(obj, {
+                val: target, duration: 1.8, ease: 'power2.out',
+                onUpdate: () => { el.textContent = Math.round(obj.val).toLocaleString('fr-BE'); }
+            });
+        }
+    });
+});
+
+/* Rising bubble/particle drift (subtle, industrial dust motes over hero) */
+const bubblesContainer = document.getElementById('bubbles-container');
+function createMote() {
+    const mote = document.createElement('div');
+    const size = Math.random() * 3 + 1;
+    mote.style.cssText = `
+        position:fixed;left:${Math.random()*100}%;bottom:-10px;
+        width:${size}px;height:${size}px;border-radius:50%;
+        background:rgba(46,194,74,${Math.random()*0.35+0.1});
+        pointer-events:none;z-index:1;
+    `;
+    bubblesContainer.appendChild(mote);
+    const duration = Math.random() * 6 + 6;
+    gsap.to(mote, {
+        y: -(window.innerHeight * 1.1), x: (Math.random()-0.5)*80,
+        opacity: 0, duration: duration, ease: 'none',
+        onComplete: () => mote.remove()
+    });
+}
+setInterval(() => { if (window.scrollY < window.innerHeight) createMote(); }, 500);
+
+/* Mobile nav toggle (simple show/hide) */
+const navToggle = document.querySelector('.nav-toggle');
+</script>
+</body>
+</html>
