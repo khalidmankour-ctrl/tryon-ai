@@ -21,8 +21,14 @@ export function pick () {
   const passer  = by(p => p.s.assists)[0];
   const workhorse = by(p => p.s.min)[0];
 
+  /* Le plus utilisé, en évitant de citer deux fois le même joueur quand il
+     mène aussi aux passes décisives. Partagé par la carte et la narration. */
+  const second = workhorse.id === passer.id
+    ? by(p => p.s.min).find(p => p.id !== passer.id) || workhorse
+    : workhorse;
+
   return {
-    best, riser, passer, workhorse, scorers,
+    best, riser, passer, workhorse, second, scorers,
     totals: {
       goals:   act.reduce((s, p) => s + p.s.goals, 0),
       assists: act.reduce((s, p) => s + p.s.assists, 0),
@@ -69,11 +75,7 @@ export function narration (d) {
   /* Pour la voix, les nombres s'écrivent sans séparateur de milliers :
      « 2 643 » se lirait « deux, six cent quarante-trois ». */
   const n = x => String(x);
-  /* Éviter de citer deux fois le même joueur dans les brèves. */
-  const second = d.workhorse.id === d.passer.id
-    ? PLAYERS.filter(p => p.s.min > 0 && p.id !== d.passer.id)
-             .sort((a, b) => b.s.min - a.s.min)[0]
-    : d.workhorse;
+  const second = d.second;
   return [
     { step: 2, text: `La une. ${d.best.name}, ${d.best.role.toLowerCase()} à ${d.best.club}, `
                    + `signe la meilleure note du groupe suivi : ${String(d.best.s.rating).replace('.', ',')} de moyenne `
@@ -197,7 +199,7 @@ export function renderJournal () {
           <span class="jn-kicker">En bref</span>
           <ul class="jn-briefs">
             <li><b>${d.passer.name}</b> mène les passes décisives avec <b>${d.passer.s.assists}</b>.</li>
-            <li><b>${d.workhorse.name}</b> est le plus utilisé : <b>${fmt(d.workhorse.s.min)}</b> minutes.</li>
+            <li><b>${d.second.name}</b> est le plus utilisé : <b>${fmt(d.second.s.min)}</b> minutes.</li>
             <li>Le groupe pèse <b>${fmt(d.totals.caps)}</b> sélections cumulées.</li>
             <li>Les Lions sont représentés dans <b>${d.totals.leagues}</b> championnats.</li>
           </ul>
