@@ -11,7 +11,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const fmt = n => Number(n).toLocaleString('fr-FR');
 
 /* --------------------------------------------------------------- sélection */
-function pick () {
+export function pick () {
   const act = PLAYERS.filter(p => p.s.min > 0);
   const by = (f) => act.slice().sort((a, b) => f(b) - f(a));
 
@@ -65,8 +65,15 @@ function raceRow (p, i, max) {
  * Il est construit depuis les mêmes données que la page : pas de script
  * figé, l'édition parlée suit l'édition écrite.
  */
-function narration (d) {
-  const n = x => fmt(x);
+export function narration (d) {
+  /* Pour la voix, les nombres s'écrivent sans séparateur de milliers :
+     « 2 643 » se lirait « deux, six cent quarante-trois ». */
+  const n = x => String(x);
+  /* Éviter de citer deux fois le même joueur dans les brèves. */
+  const second = d.workhorse.id === d.passer.id
+    ? PLAYERS.filter(p => p.s.min > 0 && p.id !== d.passer.id)
+             .sort((a, b) => b.s.min - a.s.min)[0]
+    : d.workhorse;
   return [
     { step: 2, text: `La une. ${d.best.name}, ${d.best.role.toLowerCase()} à ${d.best.club}, `
                    + `signe la meilleure note du groupe suivi : ${String(d.best.s.rating).replace('.', ',')} de moyenne `
@@ -78,7 +85,7 @@ function narration (d) {
     { step: 5, text: `En progression : ${d.riser.name}, à ${d.riser.club}, `
                    + `plus ${d.riser.trend} pour cent sur ses dernières sorties.` },
     { step: 6, text: `En bref. ${d.passer.name} mène les passes décisives avec ${d.passer.s.assists}. `
-                   + `${d.workhorse.name} est le plus utilisé, ${n(d.workhorse.s.min)} minutes. `
+                   + `${second.name} est le plus utilisé, ${n(second.s.min)} minutes. `
                    + `Le groupe pèse ${n(d.totals.caps)} sélections, dans ${d.totals.leagues} championnats.` },
     { step: 7, text: `Et pour finir, le onze type.` }
   ];
