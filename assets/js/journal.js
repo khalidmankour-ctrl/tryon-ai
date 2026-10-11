@@ -58,6 +58,50 @@ function raceRow (p, i, max) {
   </li>`;
 }
 
+/* --------------------------------------------------------------- voix off */
+
+/**
+ * Le texte lu à voix haute, une entrée par étape de la timeline.
+ * Il est construit depuis les mêmes données que la page : pas de script
+ * figé, l'édition parlée suit l'édition écrite.
+ */
+function narration (d) {
+  const n = x => fmt(x);
+  return [
+    { step: 2, text: `La une. ${d.best.name}, ${d.best.role.toLowerCase()} à ${d.best.club}, `
+                   + `signe la meilleure note du groupe suivi : ${String(d.best.s.rating).replace('.', ',')} de moyenne `
+                   + `sur ${d.best.s.apps} matchs.` },
+    { step: 3, text: `Le chiffre du jour : ${n(d.totals.goals)} buts inscrits en club `
+                   + `par les ${d.totals.players} joueurs suivis.` },
+    { step: 4, text: `Au classement des buteurs, ${d.scorers[0].name} mène avec ${d.scorers[0].s.goals} réalisations`
+                   + (d.scorers[1] ? `, devant ${d.scorers[1].name}, ${d.scorers[1].s.goals} buts.` : '.') },
+    { step: 5, text: `En progression : ${d.riser.name}, à ${d.riser.club}, `
+                   + `plus ${d.riser.trend} pour cent sur ses dernières sorties.` },
+    { step: 6, text: `En bref. ${d.passer.name} mène les passes décisives avec ${d.passer.s.assists}. `
+                   + `${d.workhorse.name} est le plus utilisé, ${n(d.workhorse.s.min)} minutes. `
+                   + `Le groupe pèse ${n(d.totals.caps)} sélections, dans ${d.totals.leagues} championnats.` },
+    { step: 7, text: `Et pour finir, le onze type.` }
+  ];
+}
+
+/** Choisit une voix française parmi celles installées sur l'appareil. */
+function frenchVoice () {
+  const voices = speechSynthesis.getVoices();
+  return voices.find(v => /^fr[-_]FR/i.test(v.lang))
+      || voices.find(v => /^fr/i.test(v.lang))
+      || null;
+}
+
+/** Les voix arrivent de façon asynchrone sur certains navigateurs. */
+function voicesReady () {
+  return new Promise(resolve => {
+    if (speechSynthesis.getVoices().length) return resolve();
+    const done = () => { speechSynthesis.removeEventListener('voiceschanged', done); resolve(); };
+    speechSynthesis.addEventListener('voiceschanged', done);
+    setTimeout(done, 1200);   // certains navigateurs n'émettent jamais l'évènement
+  });
+}
+
 /* ------------------------------------------------------------------ rendu */
 export function renderJournal () {
   const host = $('#journalPage');
@@ -164,6 +208,11 @@ export function renderJournal () {
 
       <footer class="jn-foot" data-step="8">
         <span>Édition générée automatiquement — aucune image ni séquence vidéo, uniquement des données mises en scène.</span>
+        <button class="btn btn--sm" id="jnSpeak">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/>
+            <path d="M16 8.5a4.5 4.5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Lire le journal</span>
+        </button>
         <button class="btn btn--ghost" id="jnReplay">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>
@@ -172,11 +221,29 @@ export function renderJournal () {
       </footer>
     </div>`;
 
-  $('#jnReplay').addEventListener('click', playJournal);
+  $('#jnReplay').addEventListener('click', () => playJournal());
+  const speak = $('#jnSpeak');
+  if (!('speechSynthesis' in window)) {
+    speak.remove();   // navigateur sans synthèse vocale : on n'affiche pas le bouton
+  } else {
+    speak.addEventListener('click', () => (speaking ? stopNarration() : playJournal(true)));
+  }
 }
 
 /* --------------------------------------------------------------- timeline */
 let playing = false;
+let speaking = false;
+
+function setSpeakLabel (on) {
+  const el = $('#jnSpeak span');
+  if (el) el.textContent = on ? 'Arrêter la lecture' : 'Lire le journal';
+}
+
+export function stopNarration () {
+  speaking = false;
+  try { speechSynthesis.cancel(); } catch {}
+  setSpeakLabel(false);
+}
 
 /** Compteur animé, utilisé par la timeline. */
 function countTo (el) {
@@ -193,9 +260,15 @@ function countTo (el) {
   })(t0);
 }
 
-export function playJournal () {
+/**
+ * Joue la séquence. Avec `withVoice`, c'est la voix qui cadence les
+ * révélations : chaque carte apparaît au début de sa phrase, ce qui garde
+ * l'image et le son synchrones quel que soit le débit de la voix.
+ */
+export async function playJournal (withVoice = false) {
   const root = $('#jn');
   if (!root || playing) return;
+  stopNarration();
   playing = true;
 
   /* Remise à zéro */
@@ -205,15 +278,55 @@ export function playJournal () {
 
   const steps = [...new Set($$('[data-step]', root).map(el => +el.dataset.step))].sort((a, b) => a - b);
 
-  steps.forEach((n, i) => {
-    setTimeout(() => {
-      $$(`[data-step="${n}"]`, root).forEach(el => {
-        el.classList.add('is-in');
-        $$('.jn-num, .jn-figure', el).forEach(countTo);
-      });
+  const reveal = n => $$(`[data-step="${n}"]`, root).forEach(el => {
+    el.classList.add('is-in');
+    $$('.jn-num, .jn-figure', el).forEach(countTo);
+  });
+
+  /* ---------------------------------------------------- version silencieuse */
+  if (!withVoice) {
+    steps.forEach((n, i) => setTimeout(() => {
+      reveal(n);
       if (i === steps.length - 1) {
         setTimeout(() => { root.classList.add('is-played'); playing = false; }, 900);
       }
-    }, i * 420);
-  });
+    }, i * 420));
+    return;
+  }
+
+  /* ------------------------------------------------------- version parlée */
+  /* Le bouton répond tout de suite : le chargement des voix peut prendre
+     plus d'une seconde sur certains navigateurs. */
+  speaking = true;
+  setSpeakLabel(true);
+  await voicesReady();
+  if (!speaking) { playing = false; return; }   // arrêt demandé entre-temps
+  const voice = frenchVoice();
+
+  /* L'en-tête défile pendant qu'on s'installe. */
+  steps.filter(n => n < 2).forEach((n, i) => setTimeout(() => reveal(n), i * 400));
+
+  const lines = narration(pick());
+  for (const line of lines) {
+    if (!speaking) break;
+    reveal(line.step);
+    await new Promise(resolve => {
+      const u = new SpeechSynthesisUtterance(line.text);
+      u.lang = 'fr-FR';
+      if (voice) u.voice = voice;
+      u.rate = 1.02;
+      u.pitch = 1;
+      u.onend = resolve;
+      u.onerror = resolve;          // une voix absente ne doit pas bloquer la suite
+      speechSynthesis.speak(u);
+      /* Filet : si le navigateur n'émet jamais onend, on avance quand même. */
+      setTimeout(resolve, Math.max(4000, line.text.length * 95));
+    });
+  }
+
+  steps.forEach(n => reveal(n));    // au cas où la lecture ait été coupée
+  root.classList.add('is-played');
+  playing = false;
+  speaking = false;
+  setSpeakLabel(false);
 }
